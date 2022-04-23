@@ -18,6 +18,12 @@ class MovieItem(scrapy.Item):
     popularity = scrapy.Field()
     description = scrapy.Field()
     imdb_id = scrapy.Field()
+    # #保存图片的信息
+    # images = scrapy.Field()
+    # #保存图片地址
+    image_urls =scrapy.Field()
+    image_web_url=scrapy.Field()
+    name = scrapy.Field()
 
 
 class NewMovie(scrapy.Item):
