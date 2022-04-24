@@ -17,7 +17,7 @@ NEWSPIDER_MODULE = 'imdbSpider.spiders'
 #USER_AGENT = 'imdbSpider (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -60,6 +60,10 @@ ROBOTSTXT_OBEY = True
 #    'scrapy.extensions.telnet.TelnetConsole': None,
 #}
 
+# Log file
+LOG_FILE = 'log.txt'
+
+
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
@@ -67,7 +71,11 @@ ITEM_PIPELINES = {
 }
 
 IMAGES_STORE = 'images'
+IMAGES_URLS_FIELD = 'image_urls'
 
+IMAGES_THUMBS = {
+    'format': (198, 261),
+}
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True

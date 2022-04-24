@@ -18,7 +18,7 @@ This project was designed to fetch the specified data on imdb website which base
 
 ## TO DO LIST
 
-- [ ] Build The Basic Project (22.04.22 ~ 22.04.24)
+- [x] Build The Basic Project (22.04.22 ~ 22.04.24)
 - [ ] Write The Scrapy Blog (22.04.22 ~ 22.04.24)
 - [ ] Expand The Project (22.04.22 ~ 22.04.28)
 - [ ] Perfect The *imdb-scrapy*  Repositories (22.04.22 ~ 22.04.30)

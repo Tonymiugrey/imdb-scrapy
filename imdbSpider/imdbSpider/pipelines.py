@@ -8,21 +8,24 @@
 import scrapy
 from itemadapter import ItemAdapter
 from scrapy.pipelines.images import ImagesPipeline
+from scrapy.exceptions import DropItem
+
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/100.0.4896.127 Safari/537.36',
+    'Referer': 'https://www.imdb.com/title/tt10048342/mediaviewer/rm1650697985/',
+}
 
 
 class ImdbspiderPipeline(ImagesPipeline):
-    def process_item(self, item, spider):
-        return item
 
     def get_media_requests(self, item, info):
-        yield scrapy.Request(url=item['src'], meta={'item': item})
+        for image_url in item['image_urls']:
+            yield scrapy.Request(image_url)
 
-    def file_path(self, request, response=None, info=None):
-        item = request.meta['item']
-        # 设置图片的路径为  类型名称/url地址
-        # 这是一个图片的url: http://pics.sc.chinaz.com/Files/pic/icons128/7065/z1.png
-        # 这句代码的意思是先取出图片的url，[0]表示从列表转成字符串
-        # split分割再取最后一个值，这样写是让图片名字看起来更好看一点
-        image_id = item['imdb_id']
-        item['name'] = "title: " + image_id + ".png"
-        yield item
+    def item_completed(self, results, item, info):
+        image_paths = [x['path'] for ok, x in results if ok]
+        if not image_paths:
+            raise DropItem("Item contains no images")
+        item['image_paths'] = image_paths
+        return item

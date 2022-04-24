@@ -18,12 +18,13 @@ class MovieItem(scrapy.Item):
     popularity = scrapy.Field()
     description = scrapy.Field()
     imdb_id = scrapy.Field()
-    # #保存图片的信息
-    # images = scrapy.Field()
-    # #保存图片地址
-    image_urls =scrapy.Field()
-    image_web_url=scrapy.Field()
-    name = scrapy.Field()
+    # image_web_url 图片所在网页链接
+    # image_urls 图片对应html地址
+    # image_name 图片名称
+    image_web_url = scrapy.Field()
+    image_urls = scrapy.Field()
+    image_name = scrapy.Field()
+    image_paths = scrapy.Field()
 
 
 class NewMovie(scrapy.Item):
@@ -32,6 +33,7 @@ class NewMovie(scrapy.Item):
     popularity = scrapy.Field()
     imdb_id = scrapy.Field()
     link = scrapy.Field()
+
 
 class FavouriteItem(scrapy.Item):
     title = scrapy.Field()

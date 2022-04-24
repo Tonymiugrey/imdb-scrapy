@@ -4,7 +4,7 @@ from imdbSpider.items import MovieItem
 
 class MovieSpider(scrapy.Spider):
     name = "single"
-    allowed_domains = ["https://www.imdb.com/"]
+    allowed_domains = ["imdb.com"]
     start_urls = [
         "https://www.imdb.com/title/tt10048342/"
     ]
@@ -32,15 +32,16 @@ class MovieSpider(scrapy.Spider):
         if len(tmp_link) != 1:
             item["image_web_url"] = "Error"
             yield item
+            return
 
         item['image_web_url'] = "https://www.imdb.com" + tmp_link[0].split('?')[0]
         yield scrapy.Request(item['image_web_url'], meta={'item': item}, callback=self.img_parse)
 
     def img_parse(self, response):
         item = response.meta['item']
-        res = response.xpath('//*[@id="__next"]/main/div[2]/div[3]/div[5]/img/@src').extract()
+        res = response.xpath('//*[@id="__next"]/main/div[2]/div[3]/div[4]/img/@src').extract()
         if len(res) != 1:
             yield item
             return
-        item['image_urls'] = res[0]
+        item['image_urls'] = res
         yield item
