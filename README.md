@@ -99,7 +99,7 @@ python3 -m scrapy crawl new
 
 ## TO DO LIST
 - [x] Build The Basic Project (22.04.22 ~ 22.04.24)
-- [x] Write The Scrapy Blog (22.04.22 ~ 22.04.24)
+- [x] Write The Project README (22.04.22 ~ 22.04.24)
 - [ ] Expand The Project (22.04.22 ~ 22.04.28)
 - [ ] Perfect The *imdb-scrapy*  Repositories (22.04.22 ~ 22.04.30)
 
