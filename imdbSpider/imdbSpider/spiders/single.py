@@ -5,9 +5,13 @@ from imdbSpider.items import MovieItem
 class MovieSpider(scrapy.Spider):
     name = "single"
     allowed_domains = ["imdb.com"]
-    start_urls = [
-        "https://www.imdb.com/title/tt10048342/"
-    ]
+    id_list_path = "conf/id-list"
+    tmp_urls = []
+    with open(id_list_path) as f:
+        for line in f.readlines():
+            tmp_urls.append("https://www.imdb.com/title/tt" + line)
+
+    start_urls = tmp_urls
 
     def parse(self, response):
         item = MovieItem()
