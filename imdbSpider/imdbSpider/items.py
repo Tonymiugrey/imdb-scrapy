@@ -13,6 +13,7 @@ class ImdbspiderItem(scrapy.Item):
 
 
 class MovieItem(scrapy.Item):
+    count = scrapy.Field()
     title = scrapy.Field()
     imdb_rating = scrapy.Field()
     popularity = scrapy.Field()
