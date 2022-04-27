@@ -26,7 +26,8 @@ class MovieItem(scrapy.Item):
     image_urls = scrapy.Field()
     image_name = scrapy.Field()
     image_paths = scrapy.Field()
-
+    tmp_url = scrapy.Field()
+    temp_value = scrapy.Field()
 
 class NewMovie(scrapy.Item):
     date = scrapy.Field()
