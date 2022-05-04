@@ -61,13 +61,15 @@ ROBOTSTXT_OBEY = False
 #}
 
 # Log file
-LOG_FILE = 'log.txt'
+LOG_FILE = 'log/spider.log'
 
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'imdbSpider.pipelines.ImdbspiderPipeline': 1,
+    'imdbSpider.piplines.FavouriteCsvPipeline': 2,
+    'imdbSpider.piplines.NewCsvPipeline': 2
 }
 
 IMAGES_STORE = 'images'

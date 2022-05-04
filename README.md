@@ -1,112 +1,104 @@
-# 基于Scrapy的imdb数据爬取项目——imdb-scrapy
+# imdb-scrapy
+I build this imdb-scrapy project to crawl some format imdb data basing on the scrapy framework, and the result report
+will be sent to specific email automatically.
 
-该项目是基于scrapy技术用于获取imdb网站的制定数据。
-
-This project was designed to fetch the specified data on imdb website which based scrapy.
 
 <center>
         <img src="pic/scrapy_logo.png" width=80%>
 </center>
 
-## 概述
-### 文件树
-```text
-.
-├── README.md   # 项目简介
-├── imdbSpider # 项目代码文件夹
-│   ├── images  # 图片爬取文件夹
-│   │   ├── full   #完整图片
-│   │   │   
-│   │   └── thumbs # 缩略图
-│   │       └── format  # 自定义格式图片
-│   │       
-│   ├── imdbSpider
-│   │   ├── __init__.py
-│   │   ├── items.py  # item项代码
-│   │   ├── middlewares.py  #中间件文件
-│   │   ├── pipelines.py # 管道文件
-│   │   ├── run.py  # 运行文件
-│   │   ├── settings.py  # 设置文件
-│   │   └── spiders  # 爬虫代码
-│   │       ├── __init__.py
-│   │       ├── favourite.py  # 最受欢迎榜单爬虫
-│   │       ├── new.py  # 新片爬虫
-│   │       └── single.py  # 单部影片爬虫
-│   ├── log.txt  # 日志文件
-│   └── scrapy.cfg  # 配置文件
-└── pic  # 项目图片
-    └── scrapy_logo.png
-```
+## 1. Background
+This project is designed to statisfy the need for crawling imdb websites data automatically, such as the *Upcoming Releases*,
+*Most Popular Movies*, *Custom Movies Urls List* and so on.
 
-### 爬虫文件
-业务场景需求主要为三个方面：单影片数据爬去、最受欢迎榜单数据爬取、新片数据爬取，该项目针对该三个方面写了三个爬虫：single，favourite，new。
-new与favourite实现较为简单，仅涉及单页面数据爬取。single爬虫数据涉及层级页面的爬取与图像的爬取，稍微比较复杂。
+Websites:
+1. [imdb-Upcoming Releases for United States](https://www.imdb.com/calendar/)
+2. [imdb-Most Popular Movies](https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm)
 
 
-### 主体架构与数据流
-项目的主体架构与数据流如下图所示：
-<center>
-                <img src="./pic/structure.png", width=80%>
-</center>
-
-可以看到，scrapy的具体流程为：
-
-- 1. spider 产生requests请求
-
-- 2. engine 处理请求，分配至调度器
-
-- 3. 调度器处理请求安排，传回engine
-
-- 4. engine 将request分发到download中，下载指定资源
-
-- 5. download 将response返回至engine
-
-- 6. engine将response 传回spider
-
-- 7. spider接收response，产生item或者requests
-
-- 8. 若第7步spider产生item，则将item传回pipeline管道
-
-- 9. 若第7步spider产生了request是，则返回3，调度请求
-
-其中，最值得注意的为第8步，在spider处理response时，能产生item或者requests，利用此特性，能够实现层级调度。
-
-## 安装
-### 环境要求
-```
-        Python 2.7/Python 3.6
-        Python Package: pip and setuptools. 现在 pip 依赖 setuptools ，如果未安装，则会自动安装 setuptools 。
-        lxml. 大多数Linux发行版自带了lxml。如果缺失，请查看http://lxml.de/installation.html
-        OpenSSL. 除了Windows(请查看 平台安装指南)之外的系统都已经提供。
-        Pillow
-```
-
-
-
-## 运行
+## 2. Install
 ``` shell
-# 爬取网页数据
-python3 -m scrapy crawl single
-
-# 爬取喜欢榜单
-python3 -m scrapy crawl favourite
-
-# 爬取新片榜单
-python3 -m scrapy crawl new
+cd /Path/To/imdb-scrapy
+# start the watch serve
+sh spy.sh
+# auto deploy
+crontab -e
+# imdb scrapy
+0 8 * * * cd /Path/To/imdbSpider;/bin/sh /Path/To/run.sh > /Path/To/imdbSpider/log/crontab-log.txt
 ```
 
-## 拓展
+## 3. Usage
+There are three main requirements for the imdb-scrapy project：
+1. Auto crawling the favourite or new imdb data at the specific date.
+2. Auto crawling the imdb movie data on the imdb-url-list.
+4. Send the report of result to the email of user.
+
+### 3.1 Crawl the favourite and new imdb data
+To satisfy the need of crawling favourite and new imdb data, the user only need to focus on the ```run.sh```.
+
+Users need to modify the ```run.sh``` based on specified requirements.
+``` shell
+## run.sh ##
+# execute the "new" and "favourite" crawling
+python -m scrapy crawl new
+python -m scrapy crawl favourite
+
+# transport the report
+scp data/new.csv data/favourite.csv Serve:Path
+
+# Send the report to user by email
+To be continued
+```
+
+```crontab``` is used to run the code at the specified time.
+The example code sets the 8 o'clock as the specified time, which can be modified by ```crontab -e```。
+```shell
+# imdb-scrapy crontab profile
+0 8 * * * cd /home/apps/wj/stream-media-pump/imdbSpider;/bin/sh /home/apps/wj/stream-media-pump/imdbSpider/run.sh > /home/apps/wj/stream-media-pump/imdbSpider/crontab-log.txt
+```
+
+### 3.2 Crawl the imdb-url-list data automatically
+User only need to focus on using ```scp``` to update specific imdb-url-list file to user's server.
+
+The imdb-url-list file format is as follows：
+```text
+https://www.imdb.com/title/tt3032476/
+https://www.imdb.com/title/tt9663764/
+https://www.imdb.com/title/tt9419884/
+https://www.imdb.com/title/tt12412888/
+https://www.imdb.com/title/tt7286456/
+https://www.imdb.com/title/tt3794354/
+https://www.imdb.com/title/tt4123430/
+https://www.imdb.com/title/tt1695843/
+```
+scp上传指令
+```
+# scp上传代码
+scp [path to imdb-url-list] user@server-ip:server-path-to-project
+
+# 样例
+scp /Users/Mars/imdb-scray/imdb-url-list mars@server-ip:server-path-to-project
+```
+
+### 3.3 Email
+To be continued...
+
+
+## 4. Scrapy Framework
+<center>
+        <img src="pic/spider_structure.png", width=80%>
+</center>
+There are three spiders，which are "list"，"favourite" and "new".
+
 
 ## TO DO LIST
 - [x] Build The Basic Project (22.04.22 ~ 22.04.24)
 - [x] Write The Project README (22.04.22 ~ 22.04.24)
-- [x] Expand The Project (22.04.22 ~ ?)
-	- [x] Csv poutput
-	- [ ] DataBase
-	- [ ] Automation
-- [ ] Perfect The *imdb-scrapy*  Repositories (22.04.22 ~ ?)
+- [x] Expand The Project (22.04.22 ~ 22.04.28)
+- [x] Perfect The *imdb-scrapy*  Repositories (22.04.22 ~ 22.05.04)
+- [ ] Format The Output Data Saving Path(22.05.04~)
 
-## Reference
+## Conference
 [1. Mars' Blog](https://wjmars98.github.io/)
 
 [2. 初窥Scrapy](https://scrapy-chs.readthedocs.io/zh_CN/0.24/intro/overview.html)

@@ -5,20 +5,15 @@
 
 
 # useful for handling different item types with a single interface
+import csv
+
 import scrapy
 from itemadapter import ItemAdapter
 from scrapy.pipelines.images import ImagesPipeline
 from scrapy.exceptions import DropItem
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
-                  'Chrome/100.0.4896.127 Safari/537.36',
-    'Referer': 'https://www.imdb.com/title/tt10048342/mediaviewer/rm1650697985/',
-}
-
 
 class ImdbspiderPipeline(ImagesPipeline):
-
     def get_media_requests(self, item, info):
         for image_url in item['image_urls']:
             yield scrapy.Request(image_url)
@@ -29,3 +24,54 @@ class ImdbspiderPipeline(ImagesPipeline):
             raise DropItem("Item contains no images")
         item['image_paths'] = image_paths
         return item
+
+
+class ListCsvPipeline(object):
+    def __init__(self):
+        self.f = open("data/list.csv", "w", newline="", encoding="utf-8")
+        self.fieldnames = ["title", "description",  "image_url", "imdb_url", "rating", "popularity"]
+        self.writer = csv.DictWriter(self.f, fieldnames=self.fieldnames)
+        self.writer.writeheader()
+
+    def process_item(self, item, spider):
+        if spider.name == "list":
+            print(item)
+        self.writer.writerow(item)
+        return item
+
+    def close(self, spider):
+        self.f.close()
+
+
+class FavouriteCsvPipeline(object):
+    def __init__(self):
+        self.f = open("data/favourite.csv", "w", newline="")
+        self.fieldnames = ["title", "description",  "image_url", "imdb_url", "rating", "popularity", "year"]
+        self.writer = csv.DictWriter(self.f, fieldnames=self.fieldnames)
+        self.writer.writeheader()
+
+    def process_item(self, item, spider):
+        if spider.name == "favourite":
+            print(item)
+        self.writer.writerow(item)
+        return item
+
+    def close(self, spider):
+        self.f.close()
+
+
+class NewCsvPipeline(object):
+    def __init__(self):
+        self.f = open("data/new.csv", "w", newline="")
+        self.fieldnames = ["title", "description",  "image_url", "imdb_url", "rating", "popularity", "release_time"]
+        self.writer = csv.DictWriter(self.f, fieldnames=self.fieldnames)
+        self.writer.writeheader()
+
+    def process_item(self, item, spider):
+        if spider.name == "new":
+            print(item)
+        self.writer.writerow(item)
+        return item
+
+    def close(self, spider):
+        self.f.close()

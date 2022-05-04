@@ -13,34 +13,35 @@ class ImdbspiderItem(scrapy.Item):
 
 
 class MovieItem(scrapy.Item):
-    count = scrapy.Field()
     title = scrapy.Field()
-    imdb_rating = scrapy.Field()
+    rating = scrapy.Field()
     popularity = scrapy.Field()
     description = scrapy.Field()
-    imdb_id = scrapy.Field()
-    # image_web_url 图片所在网页链接
-    # image_urls 图片对应html地址
-    # image_name 图片名称
-    image_web_url = scrapy.Field()
-    image_urls = scrapy.Field()
-    image_name = scrapy.Field()
-    image_paths = scrapy.Field()
-    tmp_url = scrapy.Field()
-    temp_value = scrapy.Field()
+    image_url = scrapy.Field()
+    imdb_url = scrapy.Field()
+
 
 class NewMovie(scrapy.Item):
-    date = scrapy.Field()
-    title = scrapy.Field()
-    popularity = scrapy.Field()
+    imdb_url = scrapy.Field()
     imdb_id = scrapy.Field()
-    link = scrapy.Field()
+    title = scrapy.Field()
+    rating = scrapy.Field()
+    popularity = scrapy.Field()
+    year = scrapy.Field()
+    release_time = scrapy.Field()
+    image_url = scrapy.Field()
+    description = scrapy.Field()
 
 
 class FavouriteItem(scrapy.Item):
-    title = scrapy.Field()
-    rank = scrapy.Field()
-    imdb_rating = scrapy.Field()
+    imdb_url = scrapy.Field()
     imdb_id = scrapy.Field()
-    link = scrapy.Field()
+    title = scrapy.Field()
+    rating = scrapy.Field()
     popularity = scrapy.Field()
+    year = scrapy.Field()
+    release_time = scrapy.Field()
+    image_url = scrapy.Field()
+    rank = scrapy.Field()
+    image_web_url = scrapy.Field()
+    description = scrapy.Field()
